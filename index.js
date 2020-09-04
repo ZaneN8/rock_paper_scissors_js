@@ -1,60 +1,66 @@
 state = {
   options: ["Rock", "Paper", "Scissors"],
-  player: "",
+  playerPick: "",
+  computerPick: "",
+  whoWon: "",
 };
-
-function randomChoice(options) {
-  // state.options; // Math.random
-  // Math.random(state.options)
-  return state.options[Math.floor(Math.random() * state.options.length)];
-}
-
-function handleClick(index) {
-  // state.options[index] = playerPick;
-  console.log(state.options[index]);
-  console.log(randomChoice());
-  checkWinner();
-}
 
 function playerChoice() {
   playerStr = "";
   state.options.forEach(function (option, index) {
     playerStr += `
-  <div onClick="handleClick(${index})">
-  ${option}
-  </div>
-  `;
+    <div onClick="handleClick(${index})">
+    ${option}
+    </div>
+    `;
   });
   return playerStr;
 }
 
-function checkWinner(playerChoice, randomChoice) {
+// function randomChoice(options) {
+//   return state.options[Math.floor(Math.random() * state.options.length)];
+// }
+
+function handleClick(index) {
+  state.computerPick =
+    state.options[Math.floor(Math.random() * state.options.length)];
+  state.playerPick = state.options[index];
+
+  console.log(state.playerPick); // HERE
+  console.log(state.computerPick); // HERE
+
+  checkWinner(state.playerPick, state.computerPick);
+  console.log(checkWinner(state.playerPick, state.computerPick));
+}
+
+function checkWinner(playerPick, computerPick) {
   let winner = null;
-  if (playerChoice === "Rock") {
-    if (randomChoice === "Paper") {
+  if (playerPick === "Rock") {
+    if (computerPick === "Paper") {
       winner = "computer";
     }
-    if (randomChoice === "Scissors") {
+    if (computerPick === "Scissors") {
       winner = "player";
     }
-  } else if (playerChoice === "Paper") {
-    if (randomChoice === "Scissors") {
+  } else if (playerPick === "Paper") {
+    if (computerPick === "Scissors") {
       winner = "computer";
     }
-    if (randomChoice === "Rock") {
+    if (computerPick === "Rock") {
       winner = "player";
     }
-  } else if (playerChoice === "Scissors") {
-    if (randomChoice === "Rock") {
+  } else if (playerPick === "Scissors") {
+    if (computerPick === "Rock") {
       winner = "computer";
     }
-    if (randomChoice === "Paper") {
+    if (computerPick === "Paper") {
       winner = "player";
     }
   }
   if (!winner) {
     winner = "tie";
   }
+  return winner;
 }
 
 function render() {
@@ -63,10 +69,8 @@ function render() {
   <h1>Rock Paper Scissors</h1>
   </div>
   ${playerChoice()}
-
-
+  ${checkWinner()}
   `;
-  // ${playerChoice()}
 
   document.getElementById("app").innerHTML = htmlStr;
 }
